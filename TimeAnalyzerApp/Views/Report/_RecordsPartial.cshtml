@@ -1,0 +1,103 @@
+﻿@using TimeAnalyzerApp.Models.Domain
+@model List<string>
+@{
+    List<Report> reports = new List<Report>() {
+        new Report { Id = 1, Title = "Simple" },
+        new Report { Id = 2, Title = "Detallado" },
+    };
+}
+
+@if (Model!=null)
+{/*
+<div class="input-group mb-3">
+  <label class="input-group-text" for="inputGroupSelect01">Options</label>
+  <select class="form-select" id="inputGroupSelect01">
+    <option selected>Choose...</option>
+    <option value="1">One</option>
+    <option value="2">Two</option>
+    <option value="3">Three</option>
+  </select>
+</div>
+*/
+        <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Ajuste</h5>
+            <div class="d-flex gap-2">
+                <div class="row row-gap-2">
+                    <div class="input-group input-group-sm">
+                        <label class="input-group-text" for="recordsList">Código de Registro</label>
+                        <select class="form-select form-select-sm" id="recordsList" aria-label=".form-select-sm example" required>
+                            <option selected>Selecciona</option>
+                            @foreach (var record in Model)
+                            {
+                                <option value="@record"> <i class="bi bi-journal-text"></i> @record</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="input-group input-group-sm">
+                        <label class="input-group-text " for="reportType">
+                            Reporte
+                        </label>
+                        <select class="form-select form-select-sm" id="reportType" aria-label=".form-select-sm example" required>
+                            <option selected>Selecciona</option>
+                            @foreach (var report in reports)
+                            {
+                                <option value="@report.Id"> <i class="bi bi-file-earmark-text"></i> @report.Title</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="generateButton" type="submit"> Ejecutar </button>
+            </div>
+        </div>
+    </div>
+}else{
+    <div class="alert alert-warning" role="alert">
+        <i class="bi bi-exclamation-triangle-fill"></i> No hay registros para mostrar
+    </div>
+}
+        
+
+<script>
+    $(document).ready(function () {
+        $('#generateButton').click(function (e) {
+            $('.summary').html(`<div class="card" aria-hidden="true">
+                <div class="card-body">
+                    <h5 class="card-title placeholder-glow">
+                        <span class="placeholder col-6"></span>
+                    </h5>
+                    <p class="card-text placeholder-glow">
+                        <span class="placeholder col-12"></span>
+                        <span class="placeholder col-12"></span>
+                        <span class="placeholder col-12"></span>
+                        <span class="placeholder col-12"></span>
+                        <span class="placeholder col-12"></span>
+                        <span class="placeholder col-12"></span>
+                        <span class="placeholder col-12"></span>
+                        <span class="placeholder col-12"></span>
+                        <span class="placeholder col-12"></span>
+                        <span class="placeholder col-12"></span>
+                        <span class="placeholder col-12"></span>
+                    </p>
+                    <a class="btn btn-primary disabled placeholder col-6" aria-disabled="true"></a>
+                </div>
+            </div>`);
+            var record = $('#recordsList').val();
+            var reportType = $('#reportType').val();
+            if (record == 'Selecciona' || reportType == 'Selecciona') {
+                alert('Selecciona un registro y un tipo de reporte');
+                $('.summary').html('');
+            } else {
+                // console.log(record,reportType);
+                $.ajax({
+                url: '@Url.Action("SummaryPartial", "Report")',
+                type: 'GET',
+                data: { recordId: record, typeId: reportType },
+                success: function (data) {
+                    $('.summary').html(data);
+                }
+                });
+            };
+        });
+    });
+</script>

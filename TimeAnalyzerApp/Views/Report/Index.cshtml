@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.2.2/css/buttons.dataTables.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.4/css/responsive.dataTables.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css" />
+}
+
+<div class="pagetitle">
+    <h1>Reportes</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Home</a></li>
+            <li class="breadcrumb-item active">Reportes</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Filtro</h5>
+                    <div class="d-flex gap-2">
+                            <div class="row row-gap-2">
+                                <div class="input-group input-group-sm">
+                                <label class="input-group-text" for="from">Desde</label>
+                                    <input type="date" id="from" name="from" class="form-control" autocomplete="off">
+                                </div>
+                                <div class="input-group input-group-sm">
+                                <label class="input-group-text" for="to">Hasta</label>
+                                    <input type="date" id="to" name="to" class="form-control" autocomplete="off">
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" id="searchButton">Buscar</button>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="records">
+            </div>
+        </div>
+        <div class="col-md-12">
+            
+            <div class="summary">
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#searchButton').click(function () {
+                var from = $('#from').val();
+                var to = $('#to').val();
+                if(from == '' || to == '') {
+                    alert('Selecciona un rango de fechas');
+                } else {
+                    $.ajax({
+                        url: '@Url.Action("RecordsPartial", "Report")',
+                        type: 'GET',
+                        data: { from: from, to: to },
+                        success: function (data) {
+                            $('.records').html(data);
+                        }
+                    });
+                }
+            
+            });
+    });
+    </script>
+    
+}

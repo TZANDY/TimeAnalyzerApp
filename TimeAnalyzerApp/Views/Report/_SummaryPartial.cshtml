@@ -1,0 +1,151 @@
+﻿@model List<TimeAnalyzerApp.Models.Domain.AttendanceSummary>
+@{
+    var first_record = Model.FirstOrDefault();
+}
+
+@section Styles {
+    
+}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Reporte</h5>
+        <table class="table table-sm" id="reportTable">
+            <thead style="font-size:13px">
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Entrada</th>
+                    <th>Salida</th>
+                    <th>Fecha</th>
+                    <th>T.Entrada</th>
+                    <th>T.Salida</th>
+                    <th>Tiempo Tarde</th>
+                    <th>Horas tarde</th>
+                    <th>Minutos tarde</th>
+                    <th>Horas Extra</th>
+                    <th>Tiempo Trabajado</th>
+                    <th>Horas Trabajadas</th>
+                    <th>Minutos Trabajados</th>
+                    <th>Observaciones</th>
+                </tr>
+            </thead>
+            <tbody style="font-size:12px">
+                @foreach (var record in Model)
+                {
+                    <tr>
+                        <td>@record.EmployeeId</td>
+                        <td>@record.EmployeeName</td>
+                        <td>@record.FirstMarking</td>
+                        <td>@record.LastMarking</td>
+                        <td>@record.Date.ToShortDateString()</td>
+                        <td>
+                            @if(record.TypeEntry.ToLower() =="tardanza")
+                            {
+                                <span style="color:orangered;font-weight:600">@record.TypeEntry</span>
+                            }
+                            else if (record.TypeEntry.ToLower() == "entrada temprana")
+                            {
+                                <span style="color:blueviolet;font-weight:600">@record.TypeEntry</span>
+                            }
+                            else if (record.TypeEntry.ToLower() == "fuera de horario")
+                            {
+                                <span style="color:red;font-weight:600">@record.TypeEntry</span>
+                            }
+                            else{
+                                <span style="font-weight:600">@record.TypeEntry</span>
+                            }
+                        </td>
+                        <td>@record.TypeExit</td>
+                        <td>@record.TimeLate</td>
+                        <td>@Math.Round(@record.HoursLate,3)</td>
+                        <td>@Math.Round(@record.MinutesLate,3)</td>
+                        <td>@record.TimeExtraHours</td>
+                        <td>@record.TimeWorked</td>
+                        <td>@Math.Round(@record.TimeWorkedHours, 3)</td>
+                        <td>@Math.Round(@record.TimeWorkedMinutes, 3)</td>
+                        <td>
+                            @if (record.Observation != null)
+                            {
+                                foreach (var observation in record.Observation)
+                                {
+                                    <span>@observation</span>
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#reportTable').DataTable({
+            responsive: true,
+            "processing": true,
+            "language": {
+                url: "https://cdn.datatables.net/plug-ins/2.0.1/i18n/es-ES.json"
+            },
+            "columns":[
+                {
+                    "data": "EmployeeId"
+                },
+                {
+                    "data": "EmployeeName"
+                },
+                {
+                    "data": "FirstMarking"
+                },
+                {
+                    "data": "LastMarking"
+                },
+                {
+                    "data": "Date"
+                },
+                {
+                    "data": "TypeEntry"
+                },
+                {
+                    "data": "TypeExit"
+                },
+                {
+                    "data": "TimeLate"
+                },
+                {
+                    "data": "HoursLate"
+                },
+                {
+                    "data": "MinutesLate"
+                },
+                {
+                    "data": "TimeExtraHours"
+                },
+                {
+                    "data": "TimeWorked"
+                },
+                {
+                    "data": "TimeWorkedHours"
+                },
+                {
+                    "data": "TimeWorkedMinutes"
+                },
+                {
+                    "data": "Observation"
+                }
+                ],
+                columnDefs:[
+                    {
+                        "targets": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],
+                        "className": "dt-center"
+                    }
+                ],
+            layout: {
+                topStart: {
+                    buttons: ['pageLength','copyHtml5', 'excelHtml5', 'csvHtml5']
+                }
+            }
+        });
+    });
+</script>
+
