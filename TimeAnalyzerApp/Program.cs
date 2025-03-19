@@ -15,9 +15,9 @@ builder.Services
             options.LoginPath = "/Access/SignIn";
             options.LogoutPath = "/Access/Logout";
             options.AccessDeniedPath = "/Access/AccessDenied";
-            options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+            options.ExpireTimeSpan = TimeSpan.FromMinutes(120);
             options.SlidingExpiration = true;
-            options.Cookie.HttpOnly = false; // Protección contra XSS
+            options.Cookie.HttpOnly = true; // Protección contra XSS
         });
 
 // Configuración de HttpClient con manejo de errores
@@ -47,6 +47,13 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.CacheControl = "no-cache, no-store, must-revalidate";
+    context.Response.Headers.Pragma = "no-cache";
+    context.Response.Headers.Expires = "0";
+    await next();
+});
 app.UseStaticFiles();
 
 

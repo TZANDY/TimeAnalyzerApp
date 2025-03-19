@@ -41,18 +41,18 @@
                         <td>
                             @if(record.TypeEntry.ToLower() =="tardanza")
                             {
-                                <span style="color:orangered;font-weight:600">@record.TypeEntry</span>
+                                <span class="badge text-bg-warning">@record.TypeEntry</span>
                             }
                             else if (record.TypeEntry.ToLower() == "entrada temprana")
                             {
-                                <span style="color:blueviolet;font-weight:600">@record.TypeEntry</span>
+                                <span class="badge text-bg-info">@record.TypeEntry</span>
                             }
                             else if (record.TypeEntry.ToLower() == "fuera de horario")
                             {
-                                <span style="color:red;font-weight:600">@record.TypeEntry</span>
+                                <span class="badge text-bg-danger">@record.TypeEntry</span>
                             }
                             else{
-                                <span style="font-weight:600">@record.TypeEntry</span>
+                                <span class="badge text-bg-success">@record.TypeEntry</span>
                             }
                         </td>
                         <td>@record.TypeExit</td>

@@ -12,7 +12,6 @@ namespace TimeAnalyzerApp.Controllers
         {
             _recordsService = recordsService;
         }
-
         public IActionResult Index()
         {
             if(User?.Identity?.IsAuthenticated == false)
@@ -21,7 +20,6 @@ namespace TimeAnalyzerApp.Controllers
             }
             return View();
         }
-
         public async Task<IActionResult> RecordsPartial(DateTime from, DateTime to)
         {
             var accestoken = User.Claims.FirstOrDefault(c => c.Type == "access_token")?.Value ?? string.Empty;
